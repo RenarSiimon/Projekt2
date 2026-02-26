@@ -1,0 +1,49 @@
+body {
+    font-family: Arial;
+    background-color: lightgray;
+    margin: 0;
+}
+
+#app {
+    background-color: white;
+    width: 320px;
+    padding: 20px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+#pealkiri {
+    color: black;
+}
+
+#todo-input {
+    padding: 5px;
+    border: 1px solid gray;
+}
+
+#add-btn {
+    padding: 5px;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+}
+
+#add-btn:hover {
+    background-color: gray;
+}
+
+#todo-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#todo-list li {
+    background-color: white;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: green;
+}
