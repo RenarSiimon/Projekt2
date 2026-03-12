@@ -2,25 +2,9 @@ const addBtn = document.querySelector('#add-btn');
 const input = document.querySelector('#todo-input');
 const list = document.querySelector('#todo-list');
 
-function saveTodos() {
-  var todos = [];
-  var items = list.getElementsByTagName("li");
+const DB_URL = "https://tinkr.tech/sdb/todolist";
 
-  for (var i = 0; i < items.length; i++) {
-    var span = items[i].getElementsByTagName("span")[0];
-
-    var todo = {
-      text: span.textContent,
-      completed: items[i].classList.contains("completed")
-    };
-
-    todos.push(todo);
-  }
-
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
-
-function createTodo(text, completed) {
+function createTodo(text, completed, id) {
   var li = document.createElement("li");
 
   if (completed === true) {
@@ -33,17 +17,27 @@ function createTodo(text, completed) {
   var doneBtn = document.createElement("button");
   doneBtn.textContent = "Done";
 
-  doneBtn.onclick = function () {
+  doneBtn.onclick = async function () {
     li.classList.toggle("completed");
-    saveTodos();
+
+    await fetch(`${DB_URL}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        completed: li.classList.contains("completed")
+      })
+    });
   };
 
   var deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Delete";
 
-  deleteBtn.onclick = function () {
+  deleteBtn.onclick = async function () {
+    await fetch(`${DB_URL}/${id}`, {
+      method: "DELETE"
+    });
+
     list.removeChild(li);
-    saveTodos();
   };
 
   li.appendChild(span);
@@ -53,31 +47,36 @@ function createTodo(text, completed) {
   return li;
 }
 
-function loadTodos() {
-  var saved = localStorage.getItem("todos");
+async function loadTodo() {
+  const response = await fetch(DB_URL);
+  const todos = await response.json();
 
-  if (saved !== null) {
-    var todos = JSON.parse(saved);
-
-    for (var i = 0; i < todos.length; i++) {
-      var item = createTodo(todos[i].text, todos[i].completed);
-      list.appendChild(item);
-    }
+  for (let pos = 0; pos < todos.length; pos++) {
+    const item = createTodo(todos[pos].text, todos[pos].completed, todos[pos].id);
+    list.appendChild(item);
   }
 }
 
-addBtn.onclick = function () {
+addBtn.onclick = async function () {
   var text = input.value.trim();
 
-  if (text === "") {
-    return;
-  }
+  if (text === "") return;
 
-  var newItem = createTodo(text, false);
+  const response = await fetch(DB_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      text: text,
+      completed: false
+    })
+  });
+
+  const data = await response.json();
+
+  const newItem = createTodo(data.text, data.completed, data.id);
   list.appendChild(newItem);
 
-  saveTodos();
   input.value = "";
 };
 
-loadTodos();
+loadTodo();
