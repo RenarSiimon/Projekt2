@@ -59,12 +59,7 @@ async function loadTodo() {
   const response = await fetch(DB_URL);
   const todos = await response.json();
 
-  list.innerHTML = "";
-
-  todos.forEach(todo => {
-    const item = createTodo(todo.text, todo.completed, todo.id);
-    list.appendChild(item);
-  });
+  list.innerHTML = "";s
 }
 addBtn.onclick = async function () {
   const text = input.value.trim();
