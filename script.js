@@ -1,6 +1,6 @@
-const addBtn = document.querySelector('#add-btn');
-const input = document.querySelector('#todo-input');
-const list = document.querySelector('#todo-list');
+const addBtn = document.querySelector("#add-btn");
+const input = document.querySelector("#todo-input");
+const list = document.querySelector("#todo-list");
 
 const DB = "https://tinkr.tech/sdb/todolist";
 
