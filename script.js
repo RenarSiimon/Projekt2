@@ -2,7 +2,7 @@ const addBtn = document.querySelector('#add-btn');
 const input = document.querySelector('#todo-input');
 const list = document.querySelector('#todo-list');
 
-const DB_URL = "https://tinkr.tech/sdb/todolist";
+const DB = "https://tinkr.tech/sdb/todolist";
 
 function createTodo(text, completed, id) {
   const li = document.createElement("li");
@@ -22,7 +22,7 @@ function createTodo(text, completed, id) {
   doneBtn.onclick = async function () {
     const newCompleted = !li.classList.contains("completed");
 
-    const response = await fetch(`${DB_URL}/${id}`, {
+    const response = await fetch(`${DB}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -42,7 +42,7 @@ function createTodo(text, completed, id) {
   deleteBtn.textContent = "Delete";
 
   deleteBtn.onclick = async function () {
-    await fetch(`${DB_URL}/${id}`, {
+    await fetch(`${DB}/${id}`, {
       method: "DELETE"
     });
 
@@ -56,15 +56,15 @@ function createTodo(text, completed, id) {
   return li;
 }
 async function loadTodo() {
-  const response = await fetch(DB_URL);
+  const response = await fetch(DB);
   const todos = await response.json();
 
-  list.innerHTML = "";s
+  list.innerHTML = "";
 }
 addBtn.onclick = async function () {
   const text = input.value.trim();
   if (!text) return;
-  const response = await fetch(DB_URL, {
+  const response = await fetch(DB, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
